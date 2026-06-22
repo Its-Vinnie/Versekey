@@ -1,0 +1,838 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BF41B81E2F5A228B00FBE5EF /* Maphari logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BF41B7E42F5A228B00FBE5EF /* Maphari logo.png */; };
+		BF769C4E2F55D02E00B90BB8 /* VerseKeyboardExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BF769C472F55D02E00B90BB8 /* VerseKeyboardExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BF2677C12F55C62C00A994AD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BF2677AB2F55C62B00A994AD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BF2677B22F55C62B00A994AD;
+			remoteInfo = VerseFinderApp;
+		};
+		BF2677CB2F55C62C00A994AD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BF2677AB2F55C62B00A994AD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BF2677B22F55C62B00A994AD;
+			remoteInfo = VerseFinderApp;
+		};
+		BF769C4C2F55D02E00B90BB8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BF2677AB2F55C62B00A994AD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BF769C462F55D02E00B90BB8;
+			remoteInfo = VerseKeyboardExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BF769C532F55D02E00B90BB8 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				BF769C4E2F55D02E00B90BB8 /* VerseKeyboardExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		BF2677B32F55C62B00A994AD /* VerseFinderApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VerseFinderApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF2677C02F55C62C00A994AD /* VerseFinderAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VerseFinderAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF2677CA2F55C62C00A994AD /* VerseFinderAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VerseFinderAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF41B7E42F5A228B00FBE5EF /* Maphari logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Maphari logo.png"; sourceTree = "<group>"; };
+		BF769C472F55D02E00B90BB8 /* VerseKeyboardExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = VerseKeyboardExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		BFA000012F5B000100000001 /* Config/APIKeys.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config/APIKeys.xcconfig; sourceTree = "<group>"; };
+		BFA000022F5B000100000001 /* Config/APIKeys.example.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config/APIKeys.example.xcconfig; sourceTree = "<group>"; };
+		BFC08C1E2F56AF360005F399 /* VerseFinderApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VerseFinderApp.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		BFCD0C982F58760B00F0CF58 /* Exceptions for "VerseFinderApp" folder in "VerseKeyboardExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				App/Core/AppGroup.swift,
+				App/Core/AppServices.swift,
+				App/Core/SpeechRecognizerService.swift,
+				App/Feature/Browse/BrowseView.swift,
+				App/Feature/Browse/VerseSelection.swift,
+				App/Feature/History/HistoryStore.swift,
+				App/Feature/Listening/ListeningOverlayView.swift,
+				App/Feature/Preview/PremiumVerseCard.swift,
+				App/Feature/Setting/SettingsStore.swift,
+				Shared/Domain/InsertPipeline.swift,
+				Shared/Model/BibleModel.swift,
+				Shared/Networking/APIBibleComClient.swift,
+				Shared/Networking/BibleAPIClient.swift,
+				Shared/Networking/CombinedAPIClient.swift,
+				Shared/Networking/ESVAPIClient.swift,
+				Shared/Networking/FuturisticLoadingView.swift,
+				Shared/Networking/SimpleVerseAPIClient.swift,
+				Shared/Networking/YouVersionAPIClient.swift,
+			);
+			target = BF769C462F55D02E00B90BB8 /* VerseKeyboardExtension */;
+		};
+		BFCD0C9A2F58760B00F0CF58 /* Exceptions for "VerseKeyboardExtension" folder in "VerseFinderApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Features/Keyboard/KeyboardView.swift,
+				Features/Keyboard/KeyboardViewModel.swift,
+				Features/Keyboard/LettersKeyboardView.swift,
+				Features/Keyboard/SystemLikeKeyboardView.swift,
+				Features/Preview/AppKeyboardPreviewView.swift,
+			);
+			target = BF2677B22F55C62B00A994AD /* VerseFinderApp */;
+		};
+		BFCD0C9B2F58760B00F0CF58 /* Exceptions for "VerseKeyboardExtension" folder in "VerseKeyboardExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Features/Preview/AppKeyboardPreviewView.swift,
+			);
+			target = BF769C462F55D02E00B90BB8 /* VerseKeyboardExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		BF2677B52F55C62B00A994AD /* VerseFinderApp */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				BFCD0C982F58760B00F0CF58 /* Exceptions for "VerseFinderApp" folder in "VerseKeyboardExtension" target */,
+			);
+			path = VerseFinderApp;
+			sourceTree = "<group>";
+		};
+		BF2677C32F55C62C00A994AD /* VerseFinderAppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = VerseFinderAppTests;
+			sourceTree = "<group>";
+		};
+		BF2677CD2F55C62C00A994AD /* VerseFinderAppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = VerseFinderAppUITests;
+			sourceTree = "<group>";
+		};
+		BF769C482F55D02E00B90BB8 /* VerseKeyboardExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				BFCD0C9A2F58760B00F0CF58 /* Exceptions for "VerseKeyboardExtension" folder in "VerseFinderApp" target */,
+				BFCD0C9B2F58760B00F0CF58 /* Exceptions for "VerseKeyboardExtension" folder in "VerseKeyboardExtension" target */,
+			);
+			path = VerseKeyboardExtension;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BF2677B02F55C62B00A994AD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF2677BD2F55C62C00A994AD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF2677C72F55C62C00A994AD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF769C442F55D02E00B90BB8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BF2677AA2F55C62B00A994AD = {
+			isa = PBXGroup;
+			children = (
+				BF2677B52F55C62B00A994AD /* VerseFinderApp */,
+				BF2677C32F55C62C00A994AD /* VerseFinderAppTests */,
+				BF2677CD2F55C62C00A994AD /* VerseFinderAppUITests */,
+				BF769C482F55D02E00B90BB8 /* VerseKeyboardExtension */,
+				BF2677B42F55C62B00A994AD /* Products */,
+				BFC08C1E2F56AF360005F399 /* VerseFinderApp.entitlements */,
+				BFA000012F5B000100000001 /* Config/APIKeys.xcconfig */,
+				BFA000022F5B000100000001 /* Config/APIKeys.example.xcconfig */,
+				BF41B7E42F5A228B00FBE5EF /* Maphari logo.png */,
+			);
+			sourceTree = "<group>";
+		};
+		BF2677B42F55C62B00A994AD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BF2677B32F55C62B00A994AD /* VerseFinderApp.app */,
+				BF2677C02F55C62C00A994AD /* VerseFinderAppTests.xctest */,
+				BF2677CA2F55C62C00A994AD /* VerseFinderAppUITests.xctest */,
+				BF769C472F55D02E00B90BB8 /* VerseKeyboardExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BF2677B22F55C62B00A994AD /* VerseFinderApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF2677D42F55C62C00A994AD /* Build configuration list for PBXNativeTarget "VerseFinderApp" */;
+			buildPhases = (
+				BF2677AF2F55C62B00A994AD /* Sources */,
+				BF2677B02F55C62B00A994AD /* Frameworks */,
+				BF2677B12F55C62B00A994AD /* Resources */,
+				BF769C532F55D02E00B90BB8 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BF769C4D2F55D02E00B90BB8 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				BF2677B52F55C62B00A994AD /* VerseFinderApp */,
+			);
+			name = VerseFinderApp;
+			packageProductDependencies = (
+			);
+			productName = VerseFinderApp;
+			productReference = BF2677B32F55C62B00A994AD /* VerseFinderApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		BF2677BF2F55C62C00A994AD /* VerseFinderAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF2677D72F55C62C00A994AD /* Build configuration list for PBXNativeTarget "VerseFinderAppTests" */;
+			buildPhases = (
+				BF2677BC2F55C62C00A994AD /* Sources */,
+				BF2677BD2F55C62C00A994AD /* Frameworks */,
+				BF2677BE2F55C62C00A994AD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BF2677C22F55C62C00A994AD /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				BF2677C32F55C62C00A994AD /* VerseFinderAppTests */,
+			);
+			name = VerseFinderAppTests;
+			packageProductDependencies = (
+			);
+			productName = VerseFinderAppTests;
+			productReference = BF2677C02F55C62C00A994AD /* VerseFinderAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		BF2677C92F55C62C00A994AD /* VerseFinderAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF2677DA2F55C62C00A994AD /* Build configuration list for PBXNativeTarget "VerseFinderAppUITests" */;
+			buildPhases = (
+				BF2677C62F55C62C00A994AD /* Sources */,
+				BF2677C72F55C62C00A994AD /* Frameworks */,
+				BF2677C82F55C62C00A994AD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BF2677CC2F55C62C00A994AD /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				BF2677CD2F55C62C00A994AD /* VerseFinderAppUITests */,
+			);
+			name = VerseFinderAppUITests;
+			packageProductDependencies = (
+			);
+			productName = VerseFinderAppUITests;
+			productReference = BF2677CA2F55C62C00A994AD /* VerseFinderAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		BF769C462F55D02E00B90BB8 /* VerseKeyboardExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF769C502F55D02E00B90BB8 /* Build configuration list for PBXNativeTarget "VerseKeyboardExtension" */;
+			buildPhases = (
+				BF769C432F55D02E00B90BB8 /* Sources */,
+				BF769C442F55D02E00B90BB8 /* Frameworks */,
+				BF769C452F55D02E00B90BB8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				BF769C482F55D02E00B90BB8 /* VerseKeyboardExtension */,
+			);
+			name = VerseKeyboardExtension;
+			packageProductDependencies = (
+			);
+			productName = VerseKeyboardExtension;
+			productReference = BF769C472F55D02E00B90BB8 /* VerseKeyboardExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BF2677AB2F55C62B00A994AD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				ORGANIZATIONNAME = "";
+				TargetAttributes = {
+					BF2677B22F55C62B00A994AD = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
+					BF2677BF2F55C62C00A994AD = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = BF2677B22F55C62B00A994AD;
+					};
+					BF2677C92F55C62C00A994AD = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = BF2677B22F55C62B00A994AD;
+					};
+					BF769C462F55D02E00B90BB8 = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
+				};
+			};
+			buildConfigurationList = BF2677AE2F55C62B00A994AD /* Build configuration list for PBXProject "VerseFinderApp" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = BF2677AA2F55C62B00A994AD;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = BF2677B42F55C62B00A994AD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BF2677B22F55C62B00A994AD /* VerseFinderApp */,
+				BF2677BF2F55C62C00A994AD /* VerseFinderAppTests */,
+				BF2677C92F55C62C00A994AD /* VerseFinderAppUITests */,
+				BF769C462F55D02E00B90BB8 /* VerseKeyboardExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BF2677B12F55C62B00A994AD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF41B81E2F5A228B00FBE5EF /* Maphari logo.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF2677BE2F55C62C00A994AD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF2677C82F55C62C00A994AD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF769C452F55D02E00B90BB8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BF2677AF2F55C62B00A994AD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF2677BC2F55C62C00A994AD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF2677C62F55C62C00A994AD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF769C432F55D02E00B90BB8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BF2677C22F55C62C00A994AD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BF2677B22F55C62B00A994AD /* VerseFinderApp */;
+			targetProxy = BF2677C12F55C62C00A994AD /* PBXContainerItemProxy */;
+		};
+		BF2677CC2F55C62C00A994AD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BF2677B22F55C62B00A994AD /* VerseFinderApp */;
+			targetProxy = BF2677CB2F55C62C00A994AD /* PBXContainerItemProxy */;
+		};
+		BF769C4D2F55D02E00B90BB8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BF769C462F55D02E00B90BB8 /* VerseKeyboardExtension */;
+			targetProxy = BF769C4C2F55D02E00B90BB8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		BF2677D22F55C62C00A994AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = A29Y272KQG;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_CFBundleDisplayName[sdk=*]" = VerseFinderApp;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSEKEY_APP_BUNDLE_IDENTIFIER = com.mapharitechnologies.versekey;
+				VERSEKEY_EXTENSION_BUNDLE_IDENTIFIER = "$(VERSEKEY_APP_BUNDLE_IDENTIFIER).VerseKeyboardExtension";
+			};
+			name = Debug;
+		};
+		BF2677D32F55C62C00A994AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = A29Y272KQG;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_CFBundleDisplayName[sdk=*]" = VerseFinderApp;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+				VERSEKEY_APP_BUNDLE_IDENTIFIER = com.mapharitechnologies.versekey;
+				VERSEKEY_EXTENSION_BUNDLE_IDENTIFIER = "$(VERSEKEY_APP_BUNDLE_IDENTIFIER).VerseKeyboardExtension";
+			};
+			name = Release;
+		};
+		BF2677D52F55C62C00A994AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BFA000012F5B000100000001 /* Config/APIKeys.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = VerseFinderApp/VerseFinderAppDebug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A29Y272KQG;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_APIBibleComAPIKey = "$(BIBLE_API_KEY)";
+				INFOPLIST_KEY_AppGroupIdentifier = group.com.maphari.versekey;
+				INFOPLIST_KEY_CFBundleDisplayName = VerseKey;
+				INFOPLIST_KEY_ESVAPIToken = "$(ESV_API_TOKEN)";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "VerseKey needs access to the microphone to capture your voice for verse search.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "VerseKey uses speech recognition to convert your voice into verse references or text.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_YouVersionAPIKey = "$(YOUVERSION_API_KEY)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(VERSEKEY_APP_BUNDLE_IDENTIFIER)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BF2677D62F55C62C00A994AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BFA000012F5B000100000001 /* Config/APIKeys.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = VerseFinderApp/VerseFinderAppDebug.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A29Y272KQG;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_APIBibleComAPIKey = "$(BIBLE_API_KEY)";
+				INFOPLIST_KEY_AppGroupIdentifier = group.com.maphari.versekey;
+				INFOPLIST_KEY_CFBundleDisplayName = VerseKey;
+				INFOPLIST_KEY_ESVAPIToken = "$(ESV_API_TOKEN)";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "VerseKey needs access to the microphone to capture your voice for verse search.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "VerseKey uses speech recognition to convert your voice into verse references or text.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_YouVersionAPIKey = "$(YOUVERSION_API_KEY)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(VERSEKEY_APP_BUNDLE_IDENTIFIER)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		BF2677D82F55C62C00A994AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A29Y272KQG;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(VERSEKEY_APP_BUNDLE_IDENTIFIER).tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VerseFinderApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VerseFinderApp";
+			};
+			name = Debug;
+		};
+		BF2677D92F55C62C00A994AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A29Y272KQG;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(VERSEKEY_APP_BUNDLE_IDENTIFIER).tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VerseFinderApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VerseFinderApp";
+			};
+			name = Release;
+		};
+		BF2677DB2F55C62C00A994AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A29Y272KQG;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(VERSEKEY_APP_BUNDLE_IDENTIFIER).uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = VerseFinderApp;
+			};
+			name = Debug;
+		};
+		BF2677DC2F55C62C00A994AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A29Y272KQG;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(VERSEKEY_APP_BUNDLE_IDENTIFIER).uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = VerseFinderApp;
+			};
+			name = Release;
+		};
+		BF769C512F55D02E00B90BB8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BFA000012F5B000100000001 /* Config/APIKeys.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = VerseKeyboardExtension/VerseKeyboardExtensionDebug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A29Y272KQG;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "VerseKeyboardExtension-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = VerseKey;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(VERSEKEY_EXTENSION_BUNDLE_IDENTIFIER)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = NO;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BF769C522F55D02E00B90BB8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BFA000012F5B000100000001 /* Config/APIKeys.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = VerseKeyboardExtension/VerseKeyboardExtensionDebug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A29Y272KQG;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "VerseKeyboardExtension-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = VerseKey;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(VERSEKEY_EXTENSION_BUNDLE_IDENTIFIER)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = NO;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BF2677AE2F55C62B00A994AD /* Build configuration list for PBXProject "VerseFinderApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF2677D22F55C62C00A994AD /* Debug */,
+				BF2677D32F55C62C00A994AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BF2677D42F55C62C00A994AD /* Build configuration list for PBXNativeTarget "VerseFinderApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF2677D52F55C62C00A994AD /* Debug */,
+				BF2677D62F55C62C00A994AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BF2677D72F55C62C00A994AD /* Build configuration list for PBXNativeTarget "VerseFinderAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF2677D82F55C62C00A994AD /* Debug */,
+				BF2677D92F55C62C00A994AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BF2677DA2F55C62C00A994AD /* Build configuration list for PBXNativeTarget "VerseFinderAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF2677DB2F55C62C00A994AD /* Debug */,
+				BF2677DC2F55C62C00A994AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BF769C502F55D02E00B90BB8 /* Build configuration list for PBXNativeTarget "VerseKeyboardExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF769C512F55D02E00B90BB8 /* Debug */,
+				BF769C522F55D02E00B90BB8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BF2677AB2F55C62B00A994AD /* Project object */;
+}

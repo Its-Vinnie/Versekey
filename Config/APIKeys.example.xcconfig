@@ -1,0 +1,7 @@
+// Copy this file to APIKeys.xcconfig and fill in local values.
+// APIKeys.xcconfig is ignored by git.
+
+BIBLE_API_KEY =
+YOUVERSION_API_KEY =
+ESV_API_TOKEN =
+

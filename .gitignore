@@ -1,0 +1,39 @@
+## Local secrets and machine-specific config
+Config/APIKeys.xcconfig
+*.xcuserstate
+xcuserdata/
+.DS_Store
+
+## Agent and assistant workspace files
+.agents/
+.codex/
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+.cursor/
+.windsurf/
+
+## Internal docs and prompts
+Docs/
+*.md
+!README.md
+
+## API guides and generated reference files
+*APIGuide.json
+*APIGuide.md
+*API*Guide*.json
+*API*Guide*.md
+*Bible*Guide*.json
+*Bible*Guide*.md
+
+## Xcode build output
+build/
+DerivedData/
+*.dSYM/
+*.xcarchive/
+*.ipa
+
+## Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
