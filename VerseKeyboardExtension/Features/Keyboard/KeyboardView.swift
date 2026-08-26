@@ -61,14 +61,14 @@ enum KeyboardTheme {
             )
         default:
             return KeyboardPalette(
-                keyboardBackground: Color(uiColor: .systemGroupedBackground),
-                keyboardBackgroundUIColor: .systemGroupedBackground,
+                keyboardBackground: .clear,
+                keyboardBackgroundUIColor: .clear,
                 controlBackground: Color(uiColor: .systemBackground),
                 controlBorder: Color.black.opacity(0.10),
                 keyBackground: Color(uiColor: .systemBackground),
-                specialKeyBackground: Color(uiColor: .tertiarySystemFill),
+                specialKeyBackground: Color(uiColor: .systemBackground),
                 keyHighlight: Color.black.opacity(0.03),
-                topCornerRadius: 0
+                topCornerRadius: UIDevice.current.userInterfaceIdiom == .pad ? 12 : 0
             )
         }
     }
@@ -77,11 +77,10 @@ enum KeyboardTheme {
         for traits: UITraitCollection,
         keyboardAppearance: UIKeyboardAppearance = .default
     ) -> UIColor {
-        switch traits.userInterfaceStyle {
-        case .dark:
-            return darkStyle(for: keyboardAppearance).keyboardBackground
-        default:
-            return .systemGroupedBackground
+        if traits.userInterfaceStyle == .dark {
+            return UIColor.clear
+        } else {
+            return UIColor.clear
         }
     }
 
@@ -98,21 +97,21 @@ enum KeyboardTheme {
         switch keyboardAppearance {
         case .dark:
             return DarkKeyboardStyle(
-                keyboardBackground: UIColor(red: 18.0 / 255.0, green: 18.0 / 255.0, blue: 18.0 / 255.0, alpha: 1.0),
-                controlBackground: UIColor(red: 43.0 / 255.0, green: 43.0 / 255.0, blue: 45.0 / 255.0, alpha: 1.0),
-                keyBackground: UIColor(red: 54.0 / 255.0, green: 54.0 / 255.0, blue: 54.0 / 255.0, alpha: 1.0),
-                specialKeyBackground: UIColor(red: 68.0 / 255.0, green: 68.0 / 255.0, blue: 68.0 / 255.0, alpha: 1.0),
-                borderOpacity: 0.22,
-                topCornerRadius: 30
+                keyboardBackground: UIColor.clear,
+                controlBackground: UIColor.secondarySystemGroupedBackground,
+                keyBackground: UIColor(red: 72/255.0, green: 72/255.0, blue: 74/255.0, alpha: 1.0),
+                specialKeyBackground: UIColor(red: 72/255.0, green: 72/255.0, blue: 74/255.0, alpha: 1.0),
+                borderOpacity: 0.12,
+                topCornerRadius: UIDevice.current.userInterfaceIdiom == .pad ? 12 : 0
             )
         default:
             return DarkKeyboardStyle(
-                keyboardBackground: UIColor(red: 58.0 / 255.0, green: 56.0 / 255.0, blue: 53.0 / 255.0, alpha: 1.0),
-                controlBackground: UIColor(red: 44.0 / 255.0, green: 44.0 / 255.0, blue: 46.0 / 255.0, alpha: 1.0),
-                keyBackground: UIColor(red: 118.0 / 255.0, green: 118.0 / 255.0, blue: 116.0 / 255.0, alpha: 1.0),
-                specialKeyBackground: UIColor(red: 75.0 / 255.0, green: 75.0 / 255.0, blue: 75.0 / 255.0, alpha: 1.0),
-                borderOpacity: 0.18,
-                topCornerRadius: 0
+                keyboardBackground: UIColor.clear,
+                controlBackground: UIColor.secondarySystemGroupedBackground,
+                keyBackground: UIColor(red: 72/255.0, green: 72/255.0, blue: 74/255.0, alpha: 1.0),
+                specialKeyBackground: UIColor(red: 72/255.0, green: 72/255.0, blue: 74/255.0, alpha: 1.0),
+                borderOpacity: 0.12,
+                topCornerRadius: UIDevice.current.userInterfaceIdiom == .pad ? 12 : 0
             )
         }
     }
@@ -350,6 +349,7 @@ private struct TranslationPill: View {
 private struct KeyboardSearchBarView: View {
     @Binding var query: String
     @Binding var selectedRange: NSRange
+    @Binding var textFieldRef: UITextField?
     var isFocused: FocusState<Bool>.Binding
     @Binding var isUserTyping: Bool
 
@@ -361,7 +361,7 @@ private struct KeyboardSearchBarView: View {
     let onTapMic: () -> Void
     let onTapSearch: () -> Void
 
-    @State private var typingTimer: Timer? = nil
+    @State private var typingWorkItem: DispatchWorkItem? = nil
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.hostKeyboardAppearance) private var hostKeyboardAppearance
 
@@ -382,6 +382,7 @@ private struct KeyboardSearchBarView: View {
                         text: $query,
                         selectedRange: $selectedRange,
                         isFocused: focusedBinding,
+                        textFieldRef: $textFieldRef,
                         placeholder: "John 3:16 or Jn 3:16",
                         fontSize: 14,
                         suppressesSystemKeyboard: true,
@@ -405,10 +406,10 @@ private struct KeyboardSearchBarView: View {
             }
             .onChange(of: query) { _ in
                 isUserTyping = true
-                typingTimer?.invalidate()
-                typingTimer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
-                    isUserTyping = false
-                }
+                typingWorkItem?.cancel()
+                let work = DispatchWorkItem { isUserTyping = false }
+                typingWorkItem = work
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: work)
             }
             .padding(.horizontal, 12)
             .frame(height: 38)
@@ -432,12 +433,18 @@ private struct KeyboardQueryTextField: UIViewRepresentable {
     @Binding var text: String
     @Binding var selectedRange: NSRange
     @Binding var isFocused: Bool
+    @Binding var textFieldRef: UITextField?
 
     let placeholder: String
     let fontSize: CGFloat
     let suppressesSystemKeyboard: Bool
     let onReturn: () -> Void
     let onFocusChanged: (Bool) -> Void
+
+    func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextField, context: Context) -> CGSize {
+        let width = proposal.width ?? uiView.bounds.width
+        return CGSize(width: width, height: 38)
+    }
 
     func makeUIView(context: Context) -> UITextField {
         let textField = UITextField(frame: .zero)
@@ -458,18 +465,21 @@ private struct KeyboardQueryTextField: UIViewRepresentable {
             attributes: [.foregroundColor: UIColor.secondaryLabel]
         )
         textField.text = text
+        textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        textField.setContentHuggingPriority(.defaultLow, for: .horizontal)
         if suppressesSystemKeyboard {
             textField.inputView = UIView(frame: .zero)
             textField.inputAccessoryView = UIView(frame: .zero)
         }
         textField.addTarget(context.coordinator, action: #selector(Coordinator.textDidChange(_:)), for: .editingChanged)
+        textFieldRef = textField
         return textField
     }
 
     func updateUIView(_ uiView: UITextField, context: Context) {
         context.coordinator.parent = self
 
-        if uiView.text != text {
+        if !context.coordinator.isEditing && uiView.text != text {
             uiView.text = text
         }
 
@@ -478,8 +488,6 @@ private struct KeyboardQueryTextField: UIViewRepresentable {
         } else if !isFocused && uiView.isFirstResponder {
             uiView.resignFirstResponder()
         }
-
-        uiView.setSelectedRange(selectedRange)
     }
 
     func makeCoordinator() -> Coordinator {
@@ -488,14 +496,17 @@ private struct KeyboardQueryTextField: UIViewRepresentable {
 
     final class Coordinator: NSObject, UITextFieldDelegate {
         var parent: KeyboardQueryTextField
+        var isEditing = false
 
         init(parent: KeyboardQueryTextField) {
             self.parent = parent
         }
 
         @objc func textDidChange(_ sender: UITextField) {
+            isEditing = true
             parent.text = sender.text ?? ""
             parent.selectedRange = sender.currentSelectedRange
+            DispatchQueue.main.async { self.isEditing = false }
         }
 
         func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -525,7 +536,7 @@ private struct KeyboardQueryTextField: UIViewRepresentable {
     }
 }
 
-private extension UITextField {
+extension UITextField {
     var currentSelectedRange: NSRange {
         guard let selectedTextRange else {
             return NSRange(location: (text ?? "").utf16.count, length: 0)
@@ -970,7 +981,7 @@ private struct TranslationOverlayPanel: View {
                             .frame(height: 34)
                             .background(
                                 RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                    .fill(selectedTranslation == translation ? Color.accentColor : palette.controlBackground)
+                                    .fill(selectedTranslation == translation ? Color.accentColor : palette.controlBackground.opacity(0.85))
                             )
                     }
                     .buttonStyle(.plain)
@@ -979,14 +990,20 @@ private struct TranslationOverlayPanel: View {
             .padding(10)
         }
         .frame(width: 220, height: 128)
-        .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(palette.keyboardBackground)
-                .shadow(color: Color.black.opacity(0.18), radius: 14, x: 0, y: 8)
-        )
+        .background {
+            if colorScheme == .dark {
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(palette.keyboardBackground)
+                    .shadow(color: Color.black.opacity(0.25), radius: 16, x: 0, y: 8)
+            } else {
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(.ultraThickMaterial)
+                    .shadow(color: Color.black.opacity(0.25), radius: 16, x: 0, y: 8)
+            }
+        }
         .overlay(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(palette.controlBorder.opacity(0.9), lineWidth: 0.6)
+                .stroke(colorScheme == .dark ? palette.controlBorder.opacity(0.9) : Color.black.opacity(0.08), lineWidth: 0.6)
         )
     }
 }
@@ -995,6 +1012,7 @@ private struct CompactBibleToolbarView: View {
     @Binding var query: String
     @Binding var selectedRange: NSRange
     @Binding var isSearchFocused: Bool
+    @Binding var textFieldRef: UITextField?
     let selectedTranslationCode: String
     let isTranslationSelectorVisible: Bool
     let isSearchActive: Bool
@@ -1022,6 +1040,7 @@ private struct CompactBibleToolbarView: View {
                         text: $query,
                         selectedRange: $selectedRange,
                         isFocused: $isSearchFocused,
+                        textFieldRef: $textFieldRef,
                         placeholder: "John 3:16 or keyword",
                         fontSize: 16,
                         suppressesSystemKeyboard: true,
@@ -1116,6 +1135,69 @@ private struct ExpandedBibleHeaderView: View {
     }
 }
 
+private struct ContentSearchResultsView: View {
+    let results: [KeyboardViewModel.VerseResult]
+    let onTapResult: (Int) -> Void
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.hostKeyboardAppearance) private var hostKeyboardAppearance
+
+    var body: some View {
+        let palette = KeyboardTheme.palette(for: colorScheme, keyboardAppearance: hostKeyboardAppearance)
+        ScrollView(.vertical, showsIndicators: false) {
+            LazyVStack(spacing: 6) {
+                ForEach(Array(results.enumerated()), id: \.offset) { index, result in
+                    Button(action: { onTapResult(index) }) {
+                        HStack(alignment: .top, spacing: 10) {
+                            Image(systemName: "book.closed")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundColor(.accentColor)
+                                .frame(width: 26, height: 26)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                        .fill(Color.accentColor.opacity(0.12))
+                                )
+
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(result.referenceLabel.replacingOccurrences(of: " 📖", with: ""))
+                                    .font(.system(size: 13, weight: .semibold))
+                                    .foregroundColor(.primary)
+                                    .lineLimit(1)
+                                Text("Tap to insert")
+                                    .font(.system(size: 10, weight: .medium))
+                                    .foregroundColor(.secondary)
+                                Text(result.previewText)
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.primary)
+                                    .lineLimit(2)
+                                    .multilineTextAlignment(.leading)
+                            }
+
+                            Spacer(minLength: 8)
+
+                            Image(systemName: "arrow.up.right")
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundColor(.accentColor)
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 10)
+                        .background(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .fill(palette.controlBackground)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .stroke(palette.controlBorder.opacity(0.75), lineWidth: 0.6)
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+        }
+    }
+}
+
 public struct KeyboardView: View {
     private enum ShellMode: Equatable {
         case compact
@@ -1132,29 +1214,49 @@ public struct KeyboardView: View {
     @State private var shellMode: ShellMode = .compact
     @State private var showsTranslationSelector: Bool = false
     @State private var isUserTyping: Bool = false
-    @State private var typingTimer: Timer? = nil
-    @State private var isCompactSearchFocused: Bool = false
-    @State private var querySelectedRange: NSRange = NSRange(location: 0, length: 0)
+    @State private var isCompactSearchFocused: Bool = true
+    @State private var activeSearchTextField: UITextField?
     @ObservedObject private var appearanceStore: KeyboardAppearanceStore
     @Environment(\.colorScheme) private var colorScheme
 
     private let inserter: InsertPipeline
     private let suppressesSystemKeyboard: Bool
-    
-    private let keyboardHeight: CGFloat = 260
-    private let compactKeyboardSurfaceHeight: CGFloat = 208
-    private let keyboardSurfaceHeight: CGFloat = 216
-    private let overlayContentHeight: CGFloat = 214
+    private let onGlobe: () -> Void
+    private let onDismissKeyboard: () -> Void
+
+    private let keyboardHeight: CGFloat
+    private let compactKeyboardSurfaceHeight: CGFloat
+    private let keyboardSurfaceHeight: CGFloat
+    private let overlayContentHeight: CGFloat
+
+    private static func computeHeights() -> (total: CGFloat, compactSurface: CGFloat, surface: CGFloat, overlay: CGFloat) {
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let total: CGFloat = isPad ? 330 : 260
+        let toolbarHeight: CGFloat = 44
+        let compactSurface = total - toolbarHeight
+        let surface = compactSurface + 8
+        let overlay = surface - 2
+        return (total, compactSurface, surface, overlay)
+    }
 
     public init(
         inserter: InsertPipeline,
         suppressesSystemKeyboard: Bool = false,
-        appearanceStore: KeyboardAppearanceStore = KeyboardAppearanceStore()
+        appearanceStore: KeyboardAppearanceStore = KeyboardAppearanceStore(),
+        onGlobe: @escaping () -> Void = {},
+        onDismissKeyboard: @escaping () -> Void = {}
     ) {
+        let h = Self.computeHeights()
         self._vm = StateObject(wrappedValue: KeyboardViewModel(inserter: inserter, settings: SettingsStore()))
         self.appearanceStore = appearanceStore
         self.inserter = inserter
         self.suppressesSystemKeyboard = suppressesSystemKeyboard
+        self.onGlobe = onGlobe
+        self.onDismissKeyboard = onDismissKeyboard
+        self.keyboardHeight = h.total
+        self.compactKeyboardSurfaceHeight = h.compactSurface
+        self.keyboardSurfaceHeight = h.surface
+        self.overlayContentHeight = h.overlay
     }
 
     public var body: some View {
@@ -1244,8 +1346,14 @@ public struct KeyboardView: View {
             }
         }
         .frame(maxWidth: .infinity, minHeight: keyboardHeight, maxHeight: keyboardHeight, alignment: .top)
-        .background(palette.keyboardBackground)
-        .clipShape(TopRoundedKeyboardShape(radius: palette.topCornerRadius))
+        .background(
+            TopRoundedKeyboardShape(radius: palette.topCornerRadius)
+                .fill(palette.keyboardBackground)
+        )
+        .overlay(
+            TopRoundedKeyboardShape(radius: palette.topCornerRadius)
+                .stroke(palette.controlBorder.opacity(0.8), lineWidth: 0.6)
+        )
         .environment(\.hostKeyboardAppearance, appearanceStore.keyboardAppearance)
         .ignoresSafeArea(.all)
         .transaction { tx in tx.disablesAnimations = true }
@@ -1277,6 +1385,9 @@ public struct KeyboardView: View {
             releaseKeyboardFocusToHost()
         }
         .onChange(of: vm.browseResult?.referenceLabel) { _, _ in
+            syncShellMode()
+        }
+        .onChange(of: vm.isShowingContentResults) { _, _ in
             syncShellMode()
         }
         .sheet(isPresented: $showFormatSheet) {
@@ -1403,15 +1514,16 @@ public struct KeyboardView: View {
     }
 
     private var isCompactSearchLoadingOrResult: Bool {
-        shellMode == .compact && vm.mode == .search && (isExpandedLoading || vm.searchResult != nil)
+        shellMode == .compact && vm.mode == .search && (isExpandedLoading || vm.searchResult != nil || vm.isShowingContentResults)
     }
 
     private var compactModeView: some View {
         VStack(spacing: 0) {
             CompactBibleToolbarView(
                 query: $vm.query,
-                selectedRange: $querySelectedRange,
+                selectedRange: $vm.querySelectedRange,
                 isSearchFocused: $isCompactSearchFocused,
+                textFieldRef: $activeSearchTextField,
                 selectedTranslationCode: vm.selectedTranslation.displayCode,
                 isTranslationSelectorVisible: showsTranslationSelector,
                 isSearchActive: isCompactSearchActive,
@@ -1421,7 +1533,8 @@ public struct KeyboardView: View {
                 onTapBrowse: { enterExpandedBrowse() },
                 onTapTranslation: { toggleTranslationSelector() }
             )
-            Color.clear.frame(height: 4)
+            .padding(.top, 4)
+            .padding(.bottom, 8)
 
             if isCompactSearchLoadingOrResult {
                 compactSearchSurface
@@ -1431,7 +1544,7 @@ public struct KeyboardView: View {
                 hostKeyboardSurface
             }
         }
-        .padding(.top, 4)
+        .padding(.top, 0)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 
@@ -1439,7 +1552,7 @@ public struct KeyboardView: View {
         VStack(spacing: 6) {
             ExpandedBibleHeaderView(
                 leadingSystemName: "keyboard.chevron.compact.down",
-                title: vm.searchResult == nil ? "Search Bible" : (cleanedReference(vm.searchResult?.referenceLabel) ?? "Verse Result"),
+                title: vm.searchResult == nil ? (vm.isShowingContentResults ? "Search Results" : "Search Bible") : (cleanedReference(vm.searchResult?.referenceLabel) ?? "Verse Result"),
                 utilitySystemName: "books.vertical",
                 selectedTranslationCode: vm.selectedTranslation.displayCode,
                 isTranslationSelectorVisible: showsTranslationSelector,
@@ -1462,7 +1575,8 @@ public struct KeyboardView: View {
             } else {
                 KeyboardSearchBarView(
                     query: $vm.query,
-                    selectedRange: $querySelectedRange,
+                    selectedRange: $vm.querySelectedRange,
+                    textFieldRef: $activeSearchTextField,
                     isFocused: $isSearchFieldFocused,
                     isUserTyping: $isUserTyping,
                     suppressesSystemKeyboard: suppressesSystemKeyboard,
@@ -1476,7 +1590,15 @@ public struct KeyboardView: View {
                 .frame(height: 38)
             }
 
-            searchKeyboardSurface
+            if vm.isShowingContentResults && !vm.contentSearchResults.isEmpty {
+                ContentSearchResultsView(
+                    results: vm.contentSearchResults,
+                    onTapResult: { index in vm.onTapContentSearchResult(at: index) }
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            } else {
+                searchKeyboardSurface
+            }
         }
         .frame(maxHeight: .infinity, alignment: .top)
     }
@@ -1558,6 +1680,13 @@ public struct KeyboardView: View {
         }
     }
 
+    private var currentReturnKeyTitle: String {
+        if isCompactSearchFocused || isSearchFieldFocused {
+            return "Search"
+        }
+        return ""
+    }
+
     private var hostKeyboardSurface: some View {
         SystemLikeKeyboardView(
             onInsert: { str in
@@ -1572,13 +1701,14 @@ public struct KeyboardView: View {
             onMoveCursor: { offset in
                 inserter.moveCursor(by: offset)
             },
+            onGlobe: onGlobe,
+            onMic: {},
+            onDismissKeyboard: onDismissKeyboard,
+            returnKeyTitle: currentReturnKeyTitle,
             hapticsEnabled: vm.hapticsEnabled
         )
         .frame(maxWidth: .infinity)
-        .frame(height: compactKeyboardSurfaceHeight)
-        .padding(.horizontal, 2)
         .layoutPriority(2)
-        .id("keyboardCompactHost")
     }
 
     private var compactSearchKeyboardSurface: some View {
@@ -1595,20 +1725,27 @@ public struct KeyboardView: View {
             onMoveCursor: { offset in
                 moveQueryCursor(by: offset)
             },
+            onGlobe: onGlobe,
+            onMic: {},
+            onDismissKeyboard: onDismissKeyboard,
+            returnKeyTitle: currentReturnKeyTitle,
             hapticsEnabled: vm.hapticsEnabled
         )
         .animation(nil, value: vm.query)
         .animation(nil, value: vm.selectedTranslation)
         .frame(maxWidth: .infinity)
-        .frame(height: compactKeyboardSurfaceHeight)
-        .padding(.horizontal, 2)
         .layoutPriority(2)
-        .id("keyboardCompactSearchInput")
     }
 
     private var compactSearchSurface: some View {
         Group {
-            if isExpandedLoading {
+            if vm.isShowingContentResults && !vm.contentSearchResults.isEmpty {
+                ContentSearchResultsView(
+                    results: vm.contentSearchResults,
+                    onTapResult: { index in vm.onTapContentSearchResult(at: index) }
+                )
+                .frame(maxWidth: .infinity)
+            } else if isExpandedLoading {
                 SearchResultsContainerView(
                     isLoading: true,
                     resultText: nil,
@@ -1645,6 +1782,10 @@ public struct KeyboardView: View {
             onMoveCursor: { offset in
                 moveQueryCursor(by: offset)
             },
+            onGlobe: onGlobe,
+            onMic: {},
+            onDismissKeyboard: onDismissKeyboard,
+            returnKeyTitle: currentReturnKeyTitle,
             hapticsEnabled: vm.hapticsEnabled
         )
         .animation(nil, value: vm.query)
@@ -1721,6 +1862,8 @@ public struct KeyboardView: View {
     private func submitExpandedSearch() {
         showsTranslationSelector = false
         deactivateSearchField()
+        vm.contentSearchResults = []
+        vm.isShowingContentResults = false
         vm.onTapSearch()
     }
 
@@ -1730,6 +1873,8 @@ public struct KeyboardView: View {
             vm.onSwitchMode(.search)
         }
         vm.searchResult = nil
+        vm.contentSearchResults = []
+        vm.isShowingContentResults = false
         if case .error(_) = vm.uiState {
             vm.uiState = .idle
         }
@@ -1748,14 +1893,27 @@ public struct KeyboardView: View {
     }
 
     private func submitCompactSearch() {
+        if let tf = activeSearchTextField {
+            vm.query = tf.text ?? ""
+        }
         let trimmed = vm.query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
         showsTranslationSelector = false
         deactivateCompactSearchField()
+        vm.contentSearchResults = []
+        vm.isShowingContentResults = false
         vm.onTapSearch()
     }
 
     private func handleSearchLeadingAction() {
+        if vm.isShowingContentResults && !vm.contentSearchResults.isEmpty {
+            vm.contentSearchResults = []
+            vm.isShowingContentResults = false
+            vm.searchResult = nil
+            vm.uiState = .idle
+            activateSearchField()
+            return
+        }
         if vm.searchResult != nil {
             vm.searchResult = nil
             vm.uiState = .idle
@@ -1796,6 +1954,8 @@ public struct KeyboardView: View {
         vm.onTapResultCardToInsert()
         vm.searchResult = nil
         vm.browseResult = nil
+        vm.contentSearchResults = []
+        vm.isShowingContentResults = false
         vm.uiState = .idle
         vm.presentation = .typing
         collapseToCompact()
@@ -1817,12 +1977,16 @@ public struct KeyboardView: View {
     }
 
     private func syncShellMode() {
-        guard shellMode != .compact else { return }
-
         if vm.mode == .search {
-            shellMode = .compact
+            if vm.isShowingContentResults && !vm.contentSearchResults.isEmpty {
+                shellMode = .expandedSearch
+            } else if shellMode != .compact {
+                shellMode = .compact
+            }
             return
         }
+
+        guard shellMode != .compact else { return }
 
         if vm.browseResult != nil {
             shellMode = .expandedResult
@@ -1847,39 +2011,81 @@ public struct KeyboardView: View {
     }
 
     private func clearQueryInput() {
+        if let tf = activeSearchTextField {
+            tf.text = ""
+            tf.setSelectedRange(NSRange(location: 0, length: 0))
+        }
         vm.query = ""
-        querySelectedRange = NSRange(location: 0, length: 0)
+        vm.contentSearchResults = []
+        vm.isShowingContentResults = false
+        vm.querySelectedRange = NSRange(location: 0, length: 0)
     }
 
     private func replaceQuerySelection(with replacement: String) {
-        let current = vm.query as NSString
-        let range = clampedQueryRange(querySelectedRange)
-        vm.query = current.replacingCharacters(in: range, with: replacement)
-        querySelectedRange = NSRange(location: range.location + (replacement as NSString).length, length: 0)
+        if let tf = activeSearchTextField {
+            let current = (tf.text ?? "") as NSString
+            let range = tf.currentSelectedRange
+            let newString = current.replacingCharacters(in: range, with: replacement)
+            let newRange = NSRange(location: range.location + (replacement as NSString).length, length: 0)
+            tf.text = newString
+            tf.setSelectedRange(newRange)
+            vm.query = newString
+            vm.querySelectedRange = newRange
+        } else {
+            let current = vm.query as NSString
+            let range = clampedQueryRange(vm.querySelectedRange)
+            vm.query = current.replacingCharacters(in: range, with: replacement)
+            vm.querySelectedRange = NSRange(location: range.location + (replacement as NSString).length, length: 0)
+        }
     }
 
     private func deleteBackwardInQuery() {
-        let current = vm.query as NSString
-        var range = clampedQueryRange(querySelectedRange)
+        if let tf = activeSearchTextField {
+            let current = (tf.text ?? "") as NSString
+            var range = tf.currentSelectedRange
 
-        if range.length == 0 {
-            guard range.location > 0 else { return }
-            range = NSRange(location: range.location - 1, length: 1)
+            if range.length == 0 {
+                guard range.location > 0 else { return }
+                range = NSRange(location: range.location - 1, length: 1)
+            }
+
+            let newString = current.replacingCharacters(in: range, with: "")
+            let newRange = NSRange(location: range.location, length: 0)
+            tf.text = newString
+            tf.setSelectedRange(newRange)
+            vm.query = newString
+            vm.querySelectedRange = newRange
+        } else {
+            let current = vm.query as NSString
+            var range = clampedQueryRange(vm.querySelectedRange)
+
+            if range.length == 0 {
+                guard range.location > 0 else { return }
+                range = NSRange(location: range.location - 1, length: 1)
+            }
+
+            vm.query = current.replacingCharacters(in: range, with: "")
+            vm.querySelectedRange = NSRange(location: range.location, length: 0)
         }
-
-        vm.query = current.replacingCharacters(in: range, with: "")
-        querySelectedRange = NSRange(location: range.location, length: 0)
     }
 
     private func moveQueryCursor(by offset: Int) {
-        let currentLength = vm.query.utf16.count
-        let currentLocation = clampedQueryRange(querySelectedRange).location
-        let newLocation = min(max(currentLocation + offset, 0), currentLength)
-        querySelectedRange = NSRange(location: newLocation, length: 0)
+        if let tf = activeSearchTextField, let start = tf.selectedTextRange?.start {
+            if let newPos = tf.position(from: start, offset: offset) {
+                tf.selectedTextRange = tf.textRange(from: newPos, to: newPos)
+            }
+            vm.query = tf.text ?? ""
+            vm.querySelectedRange = tf.currentSelectedRange
+        } else {
+            let currentLength = vm.query.utf16.count
+            let currentLocation = clampedQueryRange(vm.querySelectedRange).location
+            let newLocation = min(max(currentLocation + offset, 0), currentLength)
+            vm.querySelectedRange = NSRange(location: newLocation, length: 0)
+        }
     }
 
     private func clampQuerySelection() {
-        querySelectedRange = clampedQueryRange(querySelectedRange)
+        vm.querySelectedRange = clampedQueryRange(vm.querySelectedRange)
     }
 
     private func clampedQueryRange(_ range: NSRange) -> NSRange {
@@ -1905,3 +2111,4 @@ public struct KeyboardView: View {
         }
     }
 }
+

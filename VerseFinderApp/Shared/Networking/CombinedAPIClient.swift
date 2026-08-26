@@ -107,6 +107,47 @@ nonisolated public struct CombinedAPIClient: VerseAPIClient {
             throw error
         }
     }
+
+    /// Search verses across ALL translations that support full-text search, returning combined results
+    public func searchVerseAcrossTranslations(query: String, limit: Int = 10) async throws -> [VerseText] {
+        // Translations with real full-text search capability
+        let searchableTranslations: [Translation] = [
+            .nlt, .csb, .nkjv, .msg,          // APIBibleCom
+            .niv, .amp, .nasb1995, .nasb2020,   // YouVersion
+            .nirv, .easy, .tpt,                 // YouVersion
+            .kjv, .asv, .web                    // BibleAPI (limited but included)
+        ]
+
+        var allResults: [VerseText] = []
+
+        await withTaskGroup(of: [VerseText].self) { group in
+            for translation in searchableTranslations {
+                group.addTask { [self] in
+                    do {
+                        let results = try await self.searchVerse(query: query, translation: translation, limit: limit)
+                        return results
+                    } catch {
+                        return []
+                    }
+                }
+            }
+            for await results in group {
+                allResults.append(contentsOf: results)
+            }
+        }
+
+        // Deduplicate by reference (keep first occurrence which is typically most relevant)
+        var seen = Set<String>()
+        var deduplicated: [VerseText] = []
+        for verse in allResults {
+            let key = "\(verse.reference.book) \(verse.reference.chapter):\(verse.reference.startVerse)"
+            if seen.insert(key).inserted {
+                deduplicated.append(verse)
+            }
+        }
+
+        return deduplicated
+    }
     
     /// Handle complex verse patterns like "john 1:2,4-6,7"
     public func fetchComplexVerses(_ input: String, translation: Translation) async throws -> [VerseText] {

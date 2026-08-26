@@ -40,7 +40,7 @@ public final class KeyboardViewModel: ObservableObject {
     }
 
     @Published public var mode: KeyboardMode = .search
-    @Published public var query: String = ""
+    public var query: String = ""
     @Published public var selectedTranslation: Translation = .niv
     @Published public var insertFormat: InsertFormat = .textAndReference
     @Published public var uiState: UIState = .idle
@@ -49,6 +49,9 @@ public final class KeyboardViewModel: ObservableObject {
 
     @Published public var searchResult: VerseResult? = nil
     @Published public var browseResult: VerseResult? = nil
+    @Published public var contentSearchResults: [VerseResult] = []
+    @Published public var isShowingContentResults: Bool = false
+    public var querySelectedRange: NSRange = NSRange(location: 0, length: 0)
 
     @Published public var previewLength: PreviewLength = .medium
     @Published public var availableTranslations: [Translation] = []
@@ -328,10 +331,8 @@ public final class KeyboardViewModel: ObservableObject {
             guard let self else { return }
             let selections = VerseSelection.fromQuery(trimmed)
             if selections.isEmpty {
-                await MainActor.run {
-                    self.errorMessage = "Invalid verse reference format"
-                    self.uiState = .error(self.errorMessage ?? "Invalid input")
-                }
+                // Not a valid reference — treat as content/keyword search
+                await MainActor.run { self.performContentSearch(query: trimmed) }
                 return
             }
             if selections.count == 1 {
@@ -429,6 +430,103 @@ public final class KeyboardViewModel: ObservableObject {
                 }
             }
         }
+    }
+
+    // MARK: - Content Search (keyword / phrase search)
+
+    private func performContentSearch(query: String) {
+        fetchTask?.cancel()
+        uiState = .loadingSearch
+        presentation = .loading
+        isShowingContentResults = true
+
+        let client = self.client
+        let previewCap = self.effectivePreviewLimit(for: self.previewLength)
+        let formatter = self.formatter
+
+        fetchTask = Task.detached(priority: .userInitiated) { [weak self] in
+            do {
+                let results = try await client.searchVerseAcrossTranslations(query: query, limit: 20)
+                if Task.isCancelled { return }
+
+                var verseResults: [VerseResult] = []
+                for verseText in results {
+                    let full = formatter.formatPremiumSingle(verseText)
+                    let preview = KeyboardViewModel.previewBody(from: full, limit: previewCap)
+                    let refCore: String = {
+                        if let end = verseText.reference.endVerse {
+                            return "\(verseText.reference.book) \(verseText.reference.chapter):\(verseText.reference.startVerse)-\(end)"
+                        } else {
+                            return "\(verseText.reference.book) \(verseText.reference.chapter):\(verseText.reference.startVerse)"
+                        }
+                    }()
+                    let built = VerseResult(
+                        referenceLabel: "\(refCore) (\(verseText.translation.displayCode)) 📖",
+                        previewText: preview,
+                        fullText: full,
+                        translation: verseText.translation
+                    )
+                    verseResults.append(built)
+                }
+
+                if Task.isCancelled { return }
+                await MainActor.run {
+                    guard let self else { return }
+                    self.contentSearchResults = verseResults
+                    if verseResults.isEmpty {
+                        self.errorMessage = "No verses found for \"\(query)\""
+                        self.uiState = .error(self.errorMessage ?? "No results")
+                        self.isShowingContentResults = false
+                    } else {
+                        self.uiState = .showingResult
+                        self.presentation = .showingSearchResult
+                        self.errorMessage = nil
+                    }
+                }
+            } catch is CancellationError {
+                // ignore
+            } catch {
+                let strongSelf = self
+                await MainActor.run {
+                    guard let strongSelf else { return }
+                    strongSelf.errorMessage = Self.userFacingErrorMessage(error)
+                    strongSelf.uiState = .error(strongSelf.errorMessage ?? "Unknown error")
+                    strongSelf.isShowingContentResults = false
+                }
+            }
+        }
+    }
+
+    public func onTapContentSearchResult(at index: Int) {
+        guard index < contentSearchResults.count else { return }
+        let result = contentSearchResults[index]
+
+        if hapticsEnabled {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+
+        let insertedText = insertionText(for: result)
+        inserter.insert(insertedText)
+        historyStore.append(
+            selectionDescription: result.referenceLabel,
+            translation: result.translation.displayCode,
+            insertedText: insertedText
+        )
+
+        contentSearchResults = []
+        isShowingContentResults = false
+        searchResult = nil
+        uiState = .idle
+        presentation = .typing
+        returnToTyping()
+    }
+
+    public func onTapSearchResultAsSingle(_ result: VerseResult) {
+        searchResult = result
+        isShowingContentResults = false
+        contentSearchResults = []
+        uiState = .showingResult
+        presentation = .showingSearchResult
     }
 
     public func onTapMic() {
@@ -573,20 +671,20 @@ public final class KeyboardViewModel: ObservableObject {
 
             // Not a direct reference: search then fetch
             do {
-                let results = try await self.client.searchVerse(query: normalized, translation: self.selectedTranslation, limit: 1)
+                let results = try await self.client.searchVerseAcrossTranslations(query: normalized, limit: 5)
                 if Task.isCancelled { return }
                 if let top = results.first {
-                    let verse = try await self.client.fetch(reference: top.reference, translation: self.selectedTranslation)
+                    let verse = try await self.client.fetch(reference: top.reference, translation: top.translation)
                     if Task.isCancelled { return }
                     await MainActor.run {
                         let full = self.formatter.formatPremiumSingle(verse)
                         let preview = KeyboardViewModel.previewBody(from: full, limit: self.effectivePreviewLimit(for: self.previewLength))
                         let refCore = "\(verse.reference.book) \(verse.reference.chapter):\(verse.reference.startVerse)"
                         let built = VerseResult(
-                            referenceLabel: self.makeReferenceLabel(from: refCore),
+                            referenceLabel: "\(refCore) (\(top.translation.displayCode)) 📖",
                             previewText: preview,
                             fullText: full,
-                            translation: self.selectedTranslation
+                            translation: top.translation
                         )
                         self.searchResult = built
                         self.browseResult = nil

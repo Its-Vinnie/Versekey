@@ -26,7 +26,30 @@ struct PreviewView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: keyboardHeight)
                     .padding(.bottom, 4)
-                    .background(Color.clear)
+                    .background(
+                        LinearGradient(
+                            colors: [
+                                Color(.systemBackground),
+                                Color(.systemBackground).opacity(0.95)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                        .overlay(
+                            LinearGradient(
+                                colors: [
+                                    Color.accentColor.opacity(0.06),
+                                    Color.clear,
+                                    Color.blue.opacity(0.04)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: -4)
+                    .padding(.horizontal, 4)
                     .layoutPriority(1)
             }
             .navigationTitle("Preview")

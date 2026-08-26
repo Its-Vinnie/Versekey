@@ -9,37 +9,44 @@ import UIKit
 import SwiftUI
 
 private enum KeyboardLayout {
-    static let height: CGFloat = 260
+    /// Fixed heights — never recalculated to prevent resize-on-focus loops.
+    /// iPad portrait needs ~287pt, landscape ~326pt. Use 330pt to fit both.
+    /// iPhone: 260pt — never changed.
+    static var height: CGFloat {
+        if UIDevice.current.userInterfaceIdiom == .pad { return 330 }
+        return 260
+    }
 }
 
 private final class FixedHeightKeyboardInputView: UIInputView {
     let fixedHeight: CGFloat
 
     private var fixedHeightConstraint: NSLayoutConstraint?
+    private var widthConstraint: NSLayoutConstraint?
 
     init(height: CGFloat) {
         self.fixedHeight = height
         let initialWidth = UIScreen.main.bounds.width
         super.init(frame: CGRect(x: 0, y: 0, width: initialWidth, height: height), inputViewStyle: .keyboard)
-        allowsSelfSizing = true
+        allowsSelfSizing = false
         isOpaque = false
         clipsToBounds = true
         preservesSuperviewLayoutMargins = false
         insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
-        installHeightConstraint()
+        installConstraints()
     }
 
     required init?(coder: NSCoder) {
         self.fixedHeight = KeyboardLayout.height
         super.init(coder: coder)
-        allowsSelfSizing = true
+        allowsSelfSizing = false
         isOpaque = false
         clipsToBounds = true
         preservesSuperviewLayoutMargins = false
         insetsLayoutMarginsFromSafeArea = false
         layoutMargins = .zero
-        installHeightConstraint()
+        installConstraints()
     }
 
     override var safeAreaInsets: UIEdgeInsets {
@@ -76,12 +83,28 @@ private final class FixedHeightKeyboardInputView: UIInputView {
         super.layoutSubviews()
     }
 
-    private func installHeightConstraint() {
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        installWidthIfNeeded()
+    }
+
+    private func installConstraints() {
+        // Height constraint
         fixedHeightConstraint?.isActive = false
-        let constraint = heightAnchor.constraint(equalToConstant: fixedHeight)
-        constraint.priority = .required
-        constraint.isActive = true
-        fixedHeightConstraint = constraint
+        let heightC = heightAnchor.constraint(equalToConstant: fixedHeight)
+        heightC.priority = .required
+        heightC.isActive = true
+        fixedHeightConstraint = heightC
+
+        installWidthIfNeeded()
+    }
+
+    private func installWidthIfNeeded() {
+        guard widthConstraint == nil, let superview else { return }
+        let widthC = widthAnchor.constraint(equalTo: superview.widthAnchor)
+        widthC.priority = .required
+        widthC.isActive = true
+        widthConstraint = widthC
     }
 }
 
@@ -89,7 +112,7 @@ final class KeyboardViewController: UIInputViewController {
     private var hostingController: UIHostingController<KeyboardView>?
     private var controllerHeightConstraint: NSLayoutConstraint?
     private let appearanceStore = KeyboardAppearanceStore()
-    private let compactKeyboardHeight = KeyboardLayout.height
+    private let compactKeyboardHeight: CGFloat = KeyboardLayout.height
     private var keyboardBackgroundColor: UIColor {
         KeyboardTheme.nativeKeyboardBackgroundUIColor(
             for: traitCollection,
@@ -103,7 +126,7 @@ final class KeyboardViewController: UIInputViewController {
 
     override func loadView() {
         view = FixedHeightKeyboardInputView(height: compactKeyboardHeight)
-        view.backgroundColor = keyboardBackgroundColor
+        view.backgroundColor = .clear
     }
 
     override func viewDidLoad() {
@@ -168,16 +191,22 @@ final class KeyboardViewController: UIInputViewController {
         let rootView = KeyboardView(
             inserter: inserter,
             suppressesSystemKeyboard: true,
-            appearanceStore: appearanceStore
+            appearanceStore: appearanceStore,
+            onGlobe: { [weak self] in
+                self?.advanceToNextInputMode()
+            },
+            onDismissKeyboard: { [weak self] in
+                self?.view.endEditing(true)
+            }
         )
         let host = UIHostingController(rootView: rootView)
         host.view.translatesAutoresizingMaskIntoConstraints = false
-        host.view.backgroundColor = keyboardBackgroundColor
+        host.view.backgroundColor = .clear
         host.view.insetsLayoutMarginsFromSafeArea = false
         host.view.preservesSuperviewLayoutMargins = false
         host.view.layoutMargins = .zero
         host.additionalSafeAreaInsets = .zero
-        view.backgroundColor = keyboardBackgroundColor
+        view.backgroundColor = .clear
         view.isOpaque = false
         view.clipsToBounds = true
         view.insetsLayoutMarginsFromSafeArea = false
@@ -220,7 +249,6 @@ final class KeyboardViewController: UIInputViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         refreshKeyboardAppearance()
-        preferredContentSize = CGSize(width: 0, height: compactKeyboardHeight)
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -231,14 +259,16 @@ final class KeyboardViewController: UIInputViewController {
     override func textDidChange(_ textInput: UITextInput?) {
         super.textDidChange(textInput)
         refreshKeyboardAppearance()
+        // When the host app's text changes, the host input has focus.
+        // Notify the keyboard view so it can release search bar focus.
+        appearanceStore.notifyHostInputFocused()
     }
 
     private func refreshKeyboardAppearance() {
         appearanceStore.keyboardAppearance = currentKeyboardAppearance
-        let color = keyboardBackgroundColor
-        view.backgroundColor = color
-        inputView?.backgroundColor = color
-        hostingController?.view.backgroundColor = color
+        view.backgroundColor = .clear
+        inputView?.backgroundColor = .clear
+        hostingController?.view.backgroundColor = .clear
     }
 
     override func updateViewConstraints() {
@@ -248,21 +278,19 @@ final class KeyboardViewController: UIInputViewController {
             constraint.isActive = true
             controllerHeightConstraint = constraint
         }
-        controllerHeightConstraint?.constant = compactKeyboardHeight
         preferredContentSize = CGSize(width: 0, height: compactKeyboardHeight)
         super.updateViewConstraints()
     }
 
     override func textWillChange(_ textInput: UITextInput?) {
         super.textWillChange(textInput)
+        // The host app is about to change text, meaning it has focus.
+        // Notify the keyboard view to release search bar focus.
+        appearanceStore.notifyHostInputFocused()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-
-        coordinator.animate(alongsideTransition: { _ in
-            self.applyPreferredKeyboardHeight()
-            self.view.layoutIfNeeded()
-        }, completion: nil)
+        coordinator.animate(alongsideTransition: nil, completion: nil)
     }
 }

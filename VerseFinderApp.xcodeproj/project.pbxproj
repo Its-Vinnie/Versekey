@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		BF41B81E2F5A228B00FBE5EF /* Maphari logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BF41B7E42F5A228B00FBE5EF /* Maphari logo.png */; };
 		BF769C4E2F55D02E00B90BB8 /* VerseKeyboardExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BF769C472F55D02E00B90BB8 /* VerseKeyboardExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		BFF0465C30386CBC00BCAFE0 /* right measurements of the keyboard.md in Resources */ = {isa = PBXBuildFile; fileRef = BFF0465B30386CB400BCAFE0 /* right measurements of the keyboard.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		BFA000012F5B000100000001 /* Config/APIKeys.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config/APIKeys.xcconfig; sourceTree = "<group>"; };
 		BFA000022F5B000100000001 /* Config/APIKeys.example.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config/APIKeys.example.xcconfig; sourceTree = "<group>"; };
 		BFC08C1E2F56AF360005F399 /* VerseFinderApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VerseFinderApp.entitlements; sourceTree = "<group>"; };
+		BFF0465B30386CB400BCAFE0 /* right measurements of the keyboard.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "right measurements of the keyboard.md"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -170,6 +172,7 @@
 		BF2677AA2F55C62B00A994AD = {
 			isa = PBXGroup;
 			children = (
+				BFF0465B30386CB400BCAFE0 /* right measurements of the keyboard.md */,
 				BF2677B52F55C62B00A994AD /* VerseFinderApp */,
 				BF2677C32F55C62C00A994AD /* VerseFinderAppTests */,
 				BF2677CD2F55C62C00A994AD /* VerseFinderAppUITests */,
@@ -343,6 +346,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF41B81E2F5A228B00FBE5EF /* Maphari logo.png in Resources */,
+				BFF0465C30386CBC00BCAFE0 /* right measurements of the keyboard.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
